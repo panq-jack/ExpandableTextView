@@ -32,7 +32,8 @@ android {
 }
 
 dependencies {
-    implementation project(':expandabletextview')
+//    implementation project(':expandabletextview')
+    implementation "$PROJ_GROUP:$PROJ_ARTIFACTID:$PROJ_VERSION"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.3.2'

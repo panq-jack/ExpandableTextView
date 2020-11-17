@@ -8,6 +8,11 @@ try {
 } catch (FileNotFoundException ignore) {
 }
 
+// Maven Group ID for the artifact
+group PROJ_GROUP
+// This is the library version used when deploying the artifact
+version PROJ_VERSION
+
 
 bintray {
     user = properties.getProperty("bintray.user")
@@ -17,53 +22,60 @@ bintray {
 
     pkg {
         repo = 'maven'
-        name = POM_ARTIFACT_ID
-        userOrg = ORGANIZATION
-        desc = LIBRARY_DESCRIPTION
-        websiteUrl = SITE_URL
-        vcsUrl = GIT_URL
-        issueTrackerUrl = ISSUE_URL
-        version {
-            name = VERSION_NAME
-            vcsTag = VERSION_NAME
-        }
+        name = PROJ_NAME
+        desc = PROJ_DESCRIPTION
+        websiteUrl = PROJ_WEBSITEURL
+        vcsUrl = PROJ_VCSURL
+        issueTrackerUrl = PROJ_ISSUETRACKERURL
+        userOrg = user
         licenses = ['Apache-2.0']
 
+        dryRun = false
         publish = true
         publicDownloadNumbers = true
+
+        version {
+            gpg {
+                sign = false //Determines whether to GPG sign the files. The default is false
+//                passphrase = properties.getProperty("bintray.gpg.password") //Optional. The passphrase for GPG signing'
+            }
+            mavenCentralSync {
+                sync = true //Optional (true by default). Determines whether to sync the version to Maven Central.
+                user = properties.getProperty("bintray.oss.user") //OSS user token
+                password = properties.getProperty("bintray.oss.password") //OSS user password
+                close = '1'
+                //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by puting 0 as value) and release the version manually.
+            }
+        }
+
     }
 }
-//apply plugin: 'maven'
 install {
     repositories.mavenInstaller {
-//        repository(url: uri('./repository'))
         pom.project {
             packaging 'aar'
 
-            groupId = GROUP
-            artifactId = POM_ARTIFACT_ID
-            version = VERSION_NAME
-
-            name POM_NAME
-            description LIBRARY_DESCRIPTION
-            url SITE_URL
+            name PROJ_NAME
+            description PROJ_DESCRIPTION
+            url PROJ_WEBSITEURL
 
             licenses {
                 license {
-                    name 'The Apache Software License, Version 2.0'
-                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    name LICENSE_NAME
+                    url LICENSE_URL
                 }
             }
             developers {
                 developer {
                     id DEVELOPER_ID
                     name DEVELOPER_NAME
+                    email DEVELOPER_EMAIL
                 }
             }
             scm {
-                url SITE_URL
-                connection GIT_URL
-                developerConnection GIT_URL
+                url PROJ_WEBSITEURL
+                connection PROJ_VCSURL
+                developerConnection PROJ_VCSURL
             }
         }
     }
